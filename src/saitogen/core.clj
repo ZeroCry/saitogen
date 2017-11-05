@@ -13,14 +13,29 @@
                     (.set Parser/EXTENSIONS
                           [(YamlFrontMatterExtension/create)]))
         parser (-> (Parser/builder options) .build)
-        root-node (.parse parser md)]
-    (t/translate root-node)))
+        root-node (.parse parser md)
+        meta (t/extract-metadata root-node)]
+    (println meta)
+    (t/translate root-node (:references meta))))
 
 (defn parse-file
   ""
-  [f]
-  (-> (FileUtils/readFileToString f) parse))
+  [java-file java-path]
+  (let [path-components (->> (map #(.toString %) java-path) (into []))
+        base (butlast path-components)
+        name (last path-components)
+        content (FileUtils/readFileToString java-file "utf8")]
+    (println path-components)
+    (parse content)))
 
 (defn barebones-html [h]
   (-> [:html [:head [:title "FIXME"]] (into [:body] h)]
       hiccup/html))
+
+
+
+
+(import '[java.io File])
+(defn proof-of-concept [filename]
+  (let [f (new File filename)]
+    (->> (parse-file f (.toPath f)) barebones-html (spit "out.html"))))
