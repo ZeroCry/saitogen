@@ -116,7 +116,8 @@
          .getContentLines
          (map #(.toString %))
          (map escape-html)
-         (into [:code])))
+         (apply str)
+         (conj [:pre])))
   Link
   (as-hiccup [n c refs]
     (translate-into [:a {:href (-> n .getUrl .toString escape-html)}] c refs))
@@ -139,4 +140,7 @@
     " ")
   Text
   (as-hiccup [n _ _]
-    (-> n .getChars .toString escape-html)))
+    (-> n .getChars .toString escape-html))
+  ThematicBreak
+  (as-hiccup [_ _ _]
+    [:hr]))
