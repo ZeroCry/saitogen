@@ -1,5 +1,5 @@
 (set-env!
-  :resource-paths #{"resources"}
+ ;; :resource-paths #{"resources"}
   :source-paths #{"src"}
   :dependencies '[[camel-snake-kebab "0.4.0"]
                   [com.vladsch.flexmark/flexmark-all "0.27.0"]
